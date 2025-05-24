@@ -12,7 +12,7 @@
 
 -- REQUIREMENTS ----------------------------------------------------------------------------------------------------------
 
-require('functions') -- for table_contains(table, element)
+require("functions/functions") -- for table_contains(table, element)
 
 -- STARTUP SETTINGS -------------------------------------------------------------------------------
 
