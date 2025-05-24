@@ -17,93 +17,80 @@ require('functions') -- for table_contains(table, element)
 -- STARTUP SETTINGS -------------------------------------------------------------------------------
 
 -- The factor by which the technology cost is changed.
-local cost_factor_list ={
-
- [1] = settings.startup["Nauvis-research-cost-multiplyer"].value,
- [2] = settings.startup["Space-research-cost-multiplyer"].value,
- [3] = settings.startup["Redacted-research-cost-multiplyer"].value
+local cost_factor_list = {
+    settings.startup["Nauvis-research-cost-multiplyer"].value,
+    settings.startup["Space-research-cost-multiplyer"].value,
+    settings.startup["Redacted-research-cost-multiplyer"].value
 }
--- Comma-separated list of tech ID's to be excluded from cost change.
-local ex_tech_list  = settings.startup["exclude-tech-from-cost"].value
--- list of space reserch packs
+
+local ex_tech_list = settings.startup["exclude-tech-from-cost"].value
+
 local space_science_list = {
-    [1] = "se-" .. "material-science-pack-1",
-    [2] = "se-" .. "material-science-pack-2",
-    [3] = "se-" .. "material-science-pack-3",
-    [4] = "se-" .. "material-science-pack-4",
-    [5] = "se-" .. "energy-science-pack-1",
-    [6] = "se-" .. "energy-science-pack-2",
-    [7] = "se-" .. "energy-science-pack-3",
-    [8] = "se-" .. "energy-science-pack-4",
-    [9] = "se-" .. "biological-science-pack-1",
-    [10] = "se-" .. "biological-science-pack-2",
-    [11] = "se-" .. "biological-science-pack-3",
-    [12] = "se-" .. "biological-science-pack-4",
-    [13] = "se-" .. "astronomic-science-pack-1",
-    [14] = "se-" .. "astronomic-science-pack-2",
-    [15] = "se-" .. "astronomic-science-pack-3",
-    [16] = "se-" .. "astronomic-science-pack-4",
-    [17] = "space-science-pack",
-    [18] = "utility-science-pack",
-    [19] = "production-science-pack"
-
-
+    "se-material-science-pack-1",
+    "se-material-science-pack-2",
+    "se-material-science-pack-3",
+    "se-material-science-pack-4",
+    "se-energy-science-pack-1",
+    "se-energy-science-pack-2",
+    "se-energy-science-pack-3",
+    "se-energy-science-pack-4",
+    "se-biological-science-pack-1",
+    "se-biological-science-pack-2",
+    "se-biological-science-pack-3",
+    "se-biological-science-pack-4",
+    "se-astronomic-science-pack-1",
+    "se-astronomic-science-pack-2",
+    "se-astronomic-science-pack-3",
+    "se-astronomic-science-pack-4",
+    "space-science-pack",
+    "utility-science-pack",
+    "production-science-pack"
 }
 
 local redacted_science_list = {
-    [1] = "se-" .. "deep-space-science-pack-1",
-    [2] = "se-" .. "deep-space-science-pack-2",
-    [3] = "se-" .. "deep-space-science-pack-3",
-    [4] = "se-" .. "deep-space-science-pack-4"
+    "se-deep-space-science-pack-1",
+    "se-deep-space-science-pack-2",
+    "se-deep-space-science-pack-3",
+    "se-deep-space-science-pack-4"
 }
 
--- EXCLUDED TECHNOLOGIES --------------------------------------------------------------------------
-
--- This code parses the comma-separated list of excluded tech ID's, checks if they exist, then adds
--- them to the internal list of exclusions.
-
+-- Excluded technologies
 local exclusions = {}
-
-if ex_tech_list ~= nil and type(ex_tech_list) == "string" then
-    for word in string.gmatch(ex_tech_list, '([^,]+)') do
+if type(ex_tech_list) == "string" and ex_tech_list ~= "" then
+    for word in string.gmatch(ex_tech_list, "[^,]+") do
+        word = word:match("^%s*(.-)%s*$") -- trim whitespace
         for _, tech in pairs(data.raw["technology"]) do
             if tech.name == word then
                 table.insert(exclusions, word)
+                break
             end
         end
     end
 end
 
--- TECHNOLOGY RESEARCH COST SCALING ---------------------------------------------------------------
-
--- Changes research cost for all listed technologies by a factor
-for tech_name, tech in pairs(data.raw["technology"])
-do
-    if not table_contains(exclusions, tech_name) -- [n1]
-    then
-        if tech.unit ~= nil
-        then
-
-            -- STANDARD -- Changes research cost for standard technologies by a factor
+-- Technology research cost scaling
+for tech_name, tech in pairs(data.raw["technology"]) do
+    if not table_contains(exclusions, tech_name) then
+        if tech.unit then
             local count = tech.unit.count
-            if count ~= nil and type(count) == "number" then
+            if type(count) == "number" then
                 local cost_index = 1
                 local ingredients = tech.unit.ingredients
-                for index, ingredient in pairs(ingredients) do
-                    if table_contains(redacted_science_list, ingredients[index][1]) then
-                        cost_index = 3
-                        break
-                    end
-                    if table_contains(space_science_list, ingredients[index][1]) then
-                        cost_index = 2
+                if type(ingredients) == "table" then
+                    for _, ingredient in ipairs(ingredients) do
+                        local ing_name = ingredient[1]
+                        if table_contains(redacted_science_list, ing_name) then
+                            cost_index = 3
+                            break
+                        elseif table_contains(space_science_list, ing_name) then
+                            cost_index = 2
+                        end
                     end
                 end
-
-                tech.unit.count = math.max(math.floor(count * cost_factor_list[cost_index]),1) -- [n2]
-                -- INFINITE -- Changes research cost for infinite technologies by a factor
+                tech.unit.count = math.max(math.floor(count * tonumber(cost_factor_list[cost_index])), 1)
                 local formula = tech.unit.count_formula
-                if formula ~= nil and type(formula) == "string" then
-                    tech.unit.count_formula = "(" .. formula .. ")*" .. tostring(cost_factor_list[cost_index]) -- [n3]
+                if type(formula) == "string" then
+                    tech.unit.count_formula = "(" .. formula .. ")*" .. tostring(cost_factor_list[cost_index])
                 end
             end
         end
