@@ -7,5 +7,5 @@
     "factorio_version": "2.0",
     "dependencies": ["base >= 2.0.0",
         "space-age >= 2.0.0"],
-    "description": "Adapt technology cost acording to what satge the player is in (Nauvis, Space)"
+    "description": "Adapt technology cost according to what stage the player is in (Nauvis, Space)"
 }

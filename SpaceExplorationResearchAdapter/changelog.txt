@@ -13,5 +13,5 @@ Version: 0.1.1
 Date: 2024-02-25
   Changes:
     launch
-    heavly rely on ConfigurableResearchCost_0.7.1 by ZarSasha thanks coudent do it without you
+    heavily rely on ConfigurableResearchCost_0.7.1 by ZarSasha thanks couldn't do it without you
 ---------------------------------------------------------------------------------------------------

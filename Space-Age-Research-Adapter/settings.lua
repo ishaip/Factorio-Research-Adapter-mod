@@ -8,7 +8,7 @@ data:extend({
 
   { -- This option determines the factor by which Nauvis technology cost is changed.
     type = "double-setting",
-    name = "Nauvis-research-cost-multiplyer",
+    name = "Nauvis-research-cost-multiplier",
     setting_type = "startup",
     default_value = 1,
     minimum_value = 0.001, -- [n1] 
@@ -18,7 +18,7 @@ data:extend({
   
   { -- This option determines the factor by which space technology cost is changed.
     type = "double-setting",
-    name = "Space-research-cost-multiplyer",
+    name = "Space-research-cost-multiplier",
     setting_type = "startup",
     default_value = 1,
     minimum_value = 0.001, 
@@ -28,7 +28,7 @@ data:extend({
 
   { -- This option determines the factor by which infinite technology cost is changed.
     type = "double-setting",
-    name = "Infinite-research-cost-multiplyer",
+    name = "Infinite-research-cost-multiplier",
     setting_type = "startup",
     default_value = 1,
     minimum_value = 0.001, 

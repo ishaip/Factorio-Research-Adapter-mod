@@ -18,9 +18,9 @@ require("functions/functions") -- for table_contains(table, element)
 
 -- The factor by which the technology cost is changed.
 local cost_factor_list = {
-    settings.startup["Nauvis-research-cost-multiplyer"].value,
-    settings.startup["Space-research-cost-multiplyer"].value,
-    settings.startup["Redacted-research-cost-multiplyer"].value
+    settings.startup["Nauvis-research-cost-multiplier"].value,
+    settings.startup["Space-research-cost-multiplier"].value,
+    settings.startup["Redacted-research-cost-multiplier"].value
 }
 
 local ex_tech_list = settings.startup["exclude-tech-from-cost"].value
