@@ -2,16 +2,16 @@
 Version: 1.0.0
 Date: 2024-02-25
   Changes:
-    added more readability to the code
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    - added more readability to the code
+---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2024-02-25
   Changes:
-    now it even works!
+    - now it even works!
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 2024-02-25
   Changes:
-    launch
-    heavily rely on ConfigurableResearchCost_0.7.1 by ZarSasha thanks couldn't do it without you
----------------------------------------------------------------------------------------------------
+    - launch
+    - heavily rely on ConfigurableResearchCost_0.7.1 by ZarSasha thanks couldn't do it without you
+
