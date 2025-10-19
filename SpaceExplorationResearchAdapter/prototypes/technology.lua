@@ -20,7 +20,8 @@ require("functions/functions") -- for table_contains(table, element)
 local cost_factor_list = {
     settings.startup["Nauvis-research-cost-multiplyer"].value,
     settings.startup["Space-research-cost-multiplyer"].value,
-    settings.startup["Redacted-research-cost-multiplyer"].value
+    settings.startup["Redacted-research-cost-multiplyer"].value,
+    settings.startup["Infinite-research-cost-multiplyer"].value
 }
 
 local ex_tech_list = settings.startup["exclude-tech-from-cost"].value
@@ -73,25 +74,36 @@ for tech_name, tech in pairs(data.raw["technology"]) do
     if not table_contains(exclusions, tech_name) then
         if tech.unit then
             local count = tech.unit.count
-            if type(count) == "number" then
-                local cost_index = 1
-                local ingredients = tech.unit.ingredients
-                if type(ingredients) == "table" then
-                    for _, ingredient in ipairs(ingredients) do
-                        local ing_name = ingredient[1]
-                        if table_contains(redacted_science_list, ing_name) then
-                            cost_index = 3
-                            break
-                        elseif table_contains(space_science_list, ing_name) then
-                            cost_index = 2
+            local formula = tech.unit.count_formula
+            local is_infinite = (tech.max_level == "infinite") or (type(formula) == "string")
+            
+            -- Determine cost index based on research type
+            local cost_index = 1
+            if is_infinite then
+                cost_index = 4 -- Infinite research index
+            else
+                if type(count) == "number" then
+                    local ingredients = tech.unit.ingredients
+                    if type(ingredients) == "table" then
+                        for _, ingredient in ipairs(ingredients) do
+                            local ing_name = ingredient[1]
+                            if table_contains(redacted_science_list, ing_name) then
+                                cost_index = 3
+                                break
+                            elseif table_contains(space_science_list, ing_name) then
+                                cost_index = 2
+                            end
                         end
                     end
                 end
+            end
+            
+            -- Apply cost multiplier
+            if type(count) == "number" then
                 tech.unit.count = math.max(math.floor(count * tonumber(cost_factor_list[cost_index])), 1)
-                local formula = tech.unit.count_formula
-                if type(formula) == "string" then
-                    tech.unit.count_formula = "(" .. formula .. ")*" .. tostring(cost_factor_list[cost_index])
-                end
+            end
+            if type(formula) == "string" then
+                tech.unit.count_formula = "(" .. formula .. ")*" .. tostring(cost_factor_list[cost_index])
             end
         end
     end

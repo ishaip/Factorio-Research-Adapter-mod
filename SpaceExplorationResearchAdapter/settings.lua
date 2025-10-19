@@ -36,6 +36,16 @@ data:extend({
   order = 'c'
   },
 
+  { -- This option determines the factor by which Infinite technology cost is changed.
+  type = "double-setting",
+  name = "Infinite-research-cost-multiplyer",
+  setting_type = "startup",
+  default_value = 1,
+  minimum_value = 0.01,
+  maximum_value = 1000,
+  order = 'd'
+  },
+
   { -- Option to manually type in ID of technologies to be excluded from effect of cost factor. -- [n3]
   name = "exclude-tech-from-cost",
   type = "string-setting",
@@ -43,7 +53,7 @@ data:extend({
   default_value = "creative-mod_void-technology",
   allow_blank = true,
   auto_trim = true,
-  order = "d"
+  order = "e"
   }
 
 })
