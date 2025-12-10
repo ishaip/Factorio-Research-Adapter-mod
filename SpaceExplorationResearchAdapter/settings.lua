@@ -11,8 +11,8 @@ data:extend({
     name = "Nauvis-research-cost-multiplier",
     setting_type = "startup",
     default_value = 1,
-    minimum_value = 0.01, -- [n1] 
-    maximum_value = 1000,
+    minimum_value = 0.0001,
+    maximum_value = 10000,
     order = 'a'
   },
   
@@ -21,8 +21,8 @@ data:extend({
     name = "Space-research-cost-multiplier",
     setting_type = "startup",
     default_value = 1,
-    minimum_value = 0.01, 
-    maximum_value = 1000,
+    minimum_value = 0.0001,
+    maximum_value = 10000,
     order = 'b'
   },
 
@@ -31,8 +31,8 @@ data:extend({
     name = "Redacted-research-cost-multiplier",
     setting_type = "startup",
     default_value = 1,
-    minimum_value = 0.01,
-    maximum_value = 1000,
+    minimum_value = 0.0001,
+    maximum_value = 10000,
     order = 'c'
   },
 
@@ -41,7 +41,7 @@ data:extend({
     name = "Infinite-research-cost-multiplier",
     setting_type = "startup",
     default_value = 1,
-    minimum_value = 0.001, 
+    minimum_value = 0.0001,
     maximum_value = 10000,
     order = 'd'
   },
