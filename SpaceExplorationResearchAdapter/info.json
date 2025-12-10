@@ -4,8 +4,8 @@
     "title": "Space Exploration Research Adapter By Stage",
     "author": "Hitmy",
 	"license": "MIT",
-    "factorio_version": "1.1",
+    "factorio_version": "2.0",
     "dependencies": ["base >= 2.0",
         "space-exploration >= 0.7.0"],
-    "description": "Adapt technology cost according to what stage the player is in (Nauvis, Space, Redacted)"
+    "description": "Adapt technology cost acording to what satge the player is in (Nauvis, Space, Redacted)"
 }

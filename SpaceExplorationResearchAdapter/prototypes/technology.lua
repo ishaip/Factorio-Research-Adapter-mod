@@ -2,13 +2,13 @@
 -- TECHNOLOGY   (__spaceExplorationResearchAdapter__/prototypes/technology.lua)                         --
 ---------------------------------------------------------------------------------------------------
 
--- This code is meant to lower the cost of research for all technologies, whether standard or 
+-- This code is meant to lower cost of research for all technologies, whether standard or 
 -- infinite, vanilla or modded, by a user-defined factor.
 
--- It does not rely on specific mod references. It simply iterates over the internal list of
+-- It does not rely on specific mod references. It simple iterates over the internal list of
 -- technologies and does so at the final mod loading stage (using data-final-fixes.lua).
 
--- For rare exceptions, exclusions can be added through a text field in settings.
+-- For the rare exceptions, exclusions can be added through a text-field in settings.
 
 -- REQUIREMENTS ----------------------------------------------------------------------------------------------------------
 
@@ -18,10 +18,10 @@ require("functions/functions") -- for table_contains(table, element)
 
 -- The factor by which the technology cost is changed.
 local cost_factor_list = {
-    settings.startup["Nauvis-research-cost-multiplier"].value,
-    settings.startup["Space-research-cost-multiplier"].value,
-    settings.startup["Redacted-research-cost-multiplier"].value,
-    settings.startup["infinite-research-cost-multiplier"].value
+    settings.startup["Nauvis-research-cost-multiplyer"].value,
+    settings.startup["Space-research-cost-multiplyer"].value,
+    settings.startup["Redacted-research-cost-multiplyer"].value,
+    settings.startup["Infinite-research-cost-multiplyer"].value
 }
 
 local ex_tech_list = settings.startup["exclude-tech-from-cost"].value
@@ -73,29 +73,37 @@ end
 for tech_name, tech in pairs(data.raw["technology"]) do
     if not table_contains(exclusions, tech_name) then
         if tech.unit then
+            local count = tech.unit.count
+            local formula = tech.unit.count_formula
+            local is_infinite = (tech.max_level == "infinite") or (type(formula) == "string")
+            
+            -- Determine cost index based on research type
             local cost_index = 1
-            local ingredients = tech.unit.ingredients
-            -- Check for infinite research
-            local is_infinite = (tech.max_level and tech.max_level == "infinite") or (tech.unit.count_formula and type(tech.unit.count_formula) == "string")
             if is_infinite then
-                cost_index = 4
-            elseif type(ingredients) == "table" then
-                for _, ingredient in ipairs(ingredients) do
-                    local ing_name = ingredient[1]
-                    if table_contains(redacted_science_list, ing_name) then
-                        cost_index = 3
-                        break
-                    elseif table_contains(space_science_list, ing_name) then
-                        cost_index = 2
+                cost_index = 4 -- Infinite research index
+            else
+                if type(count) == "number" then
+                    local ingredients = tech.unit.ingredients
+                    if type(ingredients) == "table" then
+                        for _, ingredient in ipairs(ingredients) do
+                            local ing_name = ingredient[1]
+                            if table_contains(redacted_science_list, ing_name) then
+                                cost_index = 3
+                                break
+                            elseif table_contains(space_science_list, ing_name) then
+                                cost_index = 2
+                            end
+                        end
                     end
                 end
             end
-            -- Handle both count and count_formula
-            if type(tech.unit.count) == "number" then
-                tech.unit.count = math.max(math.floor(tech.unit.count * tonumber(cost_factor_list[cost_index])), 1)
+            
+            -- Apply cost multiplier
+            if type(count) == "number" then
+                tech.unit.count = math.max(math.floor(count * tonumber(cost_factor_list[cost_index])), 1)
             end
-            if type(tech.unit.count_formula) == "string" then
-                tech.unit.count_formula = "(" .. tech.unit.count_formula .. ")*" .. tostring(cost_factor_list[cost_index])
+            if type(formula) == "string" then
+                tech.unit.count_formula = "(" .. formula .. ")*" .. tostring(cost_factor_list[cost_index])
             end
         end
     end

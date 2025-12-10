@@ -1,23 +1,31 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.1.0
+Version: 2.2.0
 Date: 2025-12-10
   Changes:
-    - now works for base 2.0
     - now allows for values from 0.0001 - 10000
+---------------------------------------------------------------------------------------------------Version: 2.1.0
+Date: 2025-10-19
+  Changes:
+    now supports infinite research
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2025-10-19
+  Changes:
+    compatible with 2.0
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2024-02-25
   Changes:
-    - added more readability to the code
+    added more readability to the code
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.0
 Date: 2024-02-25
   Changes:
-    - now it even works!
+    now it even works!
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 2024-02-25
   Changes:
-    - launch
-    - heavily rely on ConfigurableResearchCost_0.7.1 by ZarSasha thanks couldn't do it without you
-
+    launch
+    heavly rely on ConfigurableResearchCost_0.7.1 by ZarSasha thanks coudent do it without you
+---------------------------------------------------------------------------------------------------
